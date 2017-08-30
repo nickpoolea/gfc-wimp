@@ -1,13 +1,18 @@
 package com.libertymutual.goforcode.wimp.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Movie {
@@ -28,6 +33,9 @@ public class Movie {
 	
 	@Column(length=500, nullable=false)
 	private String distributor;
+	
+	@ManyToMany(mappedBy="movies")
+	private List<Actor> actors;
 	
 	public Movie() {}
 	
@@ -74,6 +82,15 @@ public class Movie {
 
 	public void setDistributor(String distributor) {
 		this.distributor = distributor;
+	}
+
+	
+	public List<Actor> getActors() {
+		return actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
 	}
 	
 }

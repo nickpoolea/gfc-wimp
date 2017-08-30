@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.libertymutual.goforcode.wimp.api.StuffNotFoundException;
+import com.libertymutual.goforcode.wimp.models.Actor;
 import com.libertymutual.goforcode.wimp.models.Movie;
+import com.libertymutual.goforcode.wimp.repositories.ActorRepository;
 import com.libertymutual.goforcode.wimp.repositories.MovieRepository;
 
 @RestController
@@ -23,11 +25,8 @@ public class MovieApiController {
 	
 	private MovieRepository movieRepo;
 	
-	public MovieApiController (MovieRepository movieRepo){
+	public MovieApiController (MovieRepository movieRepo, ActorRepository actorRepo){
 		this.movieRepo = movieRepo;
-		
-		movieRepo.save(new Movie("The Simpsons", ""));
-		movieRepo.save(new Movie("Spongebob", ""));
 	}
 	
 	
@@ -67,6 +66,12 @@ public class MovieApiController {
 	public Movie update(@RequestBody Movie movie, @PathVariable Long id) {
 		movie.setId(id);
 		return movieRepo.save(movie);
+	}
+	
+	@PostMapping("{movieId}/actors")
+	public List<Actor> getMovieActors(@PathVariable long movieId) {
+		return movieRepo.getOne(movieId).getActors();
+		
 	}
 	
 }
