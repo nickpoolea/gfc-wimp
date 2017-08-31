@@ -1,6 +1,7 @@
 package com.libertymutual.goforcode.wimp.api;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -24,9 +25,41 @@ import com.libertymutual.goforcode.wimp.repositories.MovieRepository;
 public class MovieApiController {
 	
 	private MovieRepository movieRepo;
+	private ActorRepository actorRepo;
 	
 	public MovieApiController (MovieRepository movieRepo, ActorRepository actorRepo){
 		this.movieRepo = movieRepo;
+		this.actorRepo = actorRepo;
+		
+		//Lists to pass assign the actors to movies
+		List<Actor> actors1 = new ArrayList<Actor>();
+		List<Actor> actors2 = new ArrayList<Actor>();
+		
+		//Movies
+		Movie movie1 = new Movie("The Simpsons Movie", "");
+		Movie movie2 = new Movie("Into the Wild Green Yonder", "");
+		
+		//Actors to assign to movies
+		Actor actor1 = new Actor("Bart", "Simpson");
+		Actor actor2 = new Actor("Turanga", "Leela");
+		
+		//Actors not assigned to movies to test post mapping assignment
+		Actor actor3 = new Actor("Homer", "Simpson");
+		Actor actor4 = new Actor("Bender", "Rodriguez");
+		
+		actorRepo.save(actor1);
+		actorRepo.save(actor2);
+		actorRepo.save(actor3);
+		actorRepo.save(actor4);
+		
+		actors1.add(actor1);
+		actors2.add(actor2);
+		
+		movie1.setActors(actors1);
+		movie2.setActors(actors2);
+		
+		movieRepo.save(movie1);
+		movieRepo.save(movie2);
 	}
 	
 	
@@ -69,9 +102,12 @@ public class MovieApiController {
 	}
 	
 	@PostMapping("{movieId}/actors")
-	public List<Actor> getMovieActors(@PathVariable long movieId) {
-		return movieRepo.getOne(movieId).getActors();
-		
+	public Movie associateAnActor(@RequestBody Actor actor, @PathVariable long movieId) {
+		Movie movie = movieRepo.findOne(movieId);
+		actor = actorRepo.findOne(actor.getId());
+		movie.addActor(actor);
+		movieRepo.save(movie);
+		return movie;
 	}
 	
 }

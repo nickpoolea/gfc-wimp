@@ -1,5 +1,6 @@
 package com.libertymutual.goforcode.wimp.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,11 +10,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+@JsonIdentityInfo (
+			generator = ObjectIdGenerators.PropertyGenerator.class,
+			property="id"
+)
 @Entity
 public class Actor {
 	
@@ -34,8 +40,12 @@ public class Actor {
 	
 	private Date birthDate;
 	
-	@ManyToMany
+//	@JsonIgnore
+	@ManyToMany(mappedBy="actors")
 	private List<Movie> movies;
+	
+	@OneToMany(mappedBy="actor")
+	private List<Award> awards;
 	
 	public Actor() {}
 	
@@ -43,6 +53,13 @@ public class Actor {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
+	
+	public void addAward(Award award) {
+		if (awards == null) {
+			awards = new ArrayList<Award>();
+		}
+		awards.add(award);
+	}	
 
 	public Long getId() {
 		return id;
@@ -90,6 +107,14 @@ public class Actor {
 
 	public void setMovies(List<Movie> movies) {
 		this.movies = movies;
+	}
+
+	public List<Award> getAwards() {
+		return awards;
+	}
+
+	public void setAwards(List<Award> awards) {
+		this.awards = awards;
 	}
 	
 	
