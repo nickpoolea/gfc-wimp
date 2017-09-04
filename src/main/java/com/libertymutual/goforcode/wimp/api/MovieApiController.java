@@ -20,8 +20,12 @@ import com.libertymutual.goforcode.wimp.models.Movie;
 import com.libertymutual.goforcode.wimp.repositories.ActorRepository;
 import com.libertymutual.goforcode.wimp.repositories.MovieRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api/movies")
+@Api(description="Use this to get and create movies")
 public class MovieApiController {
 	
 	private MovieRepository movieRepo;
@@ -62,7 +66,8 @@ public class MovieApiController {
 		movieRepo.save(movie2);
 	}
 	
-	
+	@ApiOperation(value = "Get All Movies",
+				  notes = "A method to get all movies available in the database")
 	@GetMapping("")
 	public List<Movie> getAll() {
 		return movieRepo.findAll();
@@ -88,7 +93,7 @@ public class MovieApiController {
 		} catch (InvalidDataAccessApiUsageException er) {
 			return null;
 		}
-	}
+	} 
 	
 	@PostMapping("")
 	public Movie create(@RequestBody Movie movie) {
@@ -105,9 +110,8 @@ public class MovieApiController {
 	public Movie associateAnActor(@RequestBody Actor actor, @PathVariable long movieId) {
 		Movie movie = movieRepo.findOne(movieId);
 		actor = actorRepo.findOne(actor.getId());
-		movie.addActor(actor);
-		movieRepo.save(movie);
-		return movie;
-	}
+		movie.addActor(actor); 
+		return movieRepo.save(movie);
+	} 
 	
 }

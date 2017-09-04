@@ -61,7 +61,7 @@ public class ActorApiController {
 			actorRepo.delete(actor);
 			return actor;
 		} catch (InvalidDataAccessApiUsageException er) {
-			return null;
+			return null; 
 		}
 	}
 	
@@ -81,9 +81,8 @@ public class ActorApiController {
 		Actor actor = actorRepo.findOne(actorId);
 		awardRepo.save(award);
 		award.addActor(actor);
-		actor.addAward(award);
-		actorRepo.save(actor);
-		return actor;
-	}
+		return actorRepo.save(actor);
+
+	}  
 	
 }

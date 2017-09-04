@@ -58,10 +58,10 @@ public class Actor {
 		if (awards == null) {
 			awards = new ArrayList<Award>();
 		}
-		awards.add(award);
+		awards.add(award); 
 	}	
 
-	public Long getId() {
+	public Long getId() { 
 		return id;
 	}
 

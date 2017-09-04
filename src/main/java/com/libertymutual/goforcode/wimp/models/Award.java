@@ -13,10 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
-@JsonIdentityInfo (
-		generator = ObjectIdGenerators.PropertyGenerator.class,
-		property="id"
-)
+
 @Entity
 public class Award {
 	
@@ -34,9 +31,15 @@ public class Award {
 	private String organization;
 	
 	private int year;
-	
+	 
 	@ManyToOne
 	private Actor actor;
+	
+	public Award() {}
+	
+	public Award(String title) {
+		this.title = title;
+	}
 	
 	public void addActor(Actor actor) {
 		this.actor = actor;
